@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Техническая Энциклопедия</title>
+    
+    <style>
+        /* ==========================================================================
+           ОБЩИЕ СТИЛИ И ВЫРАВНИВАНИЕ
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        header, footer {
+            max-width: 1200px;
+            margin: 0 auto 20px auto;
+            text-align: center;
+        }
+
+        /* Блок выбора палитры цветов */
+        .palette-container {
+            max-width: 1200px;
+            margin: 0 auto 20px auto;
+            padding: 15px;
+            background-color: #ffffff;
+            color: #333333;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .palette-options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .palette-btn {
+            padding: 10px 20px;
+            border: 2px solid #ccc;
+            background: #fff;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        /* ==========================================================================
+           1. МОБИЛЬНЫЙ ВИД (MOBILE-FIRST) - По умолчанию
+           ========================================================================== */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px; /* Зазор 10px между строками и колонками */
+        }
+
+        .grid-item {
+            border: 2px solid #ccc;
+            background-color: #ffffff;
+            color: #333;
+            padding: 15px;
+            border-radius: 0; /* На мобильных без скруглений */
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* ==========================================================================
+           2. ПЛАНШЕТНЫЙ ВИД (min-width: 772px)
+           ========================================================================== */
+        @media all and (min-width: 772px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr); /* 2 колонки */
+            }
+
+            .grid-item {
+                border-radius: 20px; /* Округлая форма */
+            }
+
+            .grid-item:last-child {
+                grid-column: span 2; /* Последняя фигура на обе колонки */
+            }
+        }
+
+        /* ==========================================================================
+           3. НАСТОЛЬНЫЙ ВИД (min-width: 992px)
+           ========================================================================== */
+        @media all and (min-width: 992px) {
+            .grid-container {
+                grid-template-columns: repeat(3, 1fr); /* 3 колонки */
+            }
+
+            .grid-item {
+                border-radius: 0; /* Удаляем радиус у всех фигур */
+            }
+
+            .grid-item:nth-child(3n) {
+                grid-column: span 2; /* Каждая третья фигура на обе колонки */
+            }
+
+            .grid-item:last-child {
+                grid-column: auto; /* Сброс планшетного правила для последней */
+            }
+        }
+
+        /* ==========================================================================
+           4. ПАЛИТРЫ ЦВЕТОВ (Переключаются кнопками)
+           ========================================================================== */
+
+        /* ТЕМНАЯ ПАЛИТРА */
+        body.theme-dark {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        body.theme-dark .palette-container {
+            background-color: #242424;
+            color: #ffffff;
+            border: 1px solid #444;
+        }
+        body.theme-dark .palette-btn {
+            background-color: #333;
+            color: #fff59d;
+            border-color: #000;
+        }
+        body.theme-dark .grid-item {
+            background-color: #242424; /* Изменить цвет фона фигур на темный */
+            color: #fff59d;            /* Изменить цвет шрифта на желтоватый */
+            border-color: #000000;     /* Изменить цвет границы фигур на черный */
+        }
+
+        /* ЯРКАЯ ПАЛИТРА */
+        body.theme-accent .grid-item {
+            background-color: #e3f2fd;
+            color: #0d47a1;
+            border-color: #0d47a1;
+        }
+
+        /* ==========================================================================
+           5. СОКРАЩЕНИЕ ДВИЖЕНИЯ
+           ========================================================================== */
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto !important; }
+            *, *::before, *::after {
+                animation-delay: -1ms !important;
+                animation-duration: 1ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0s !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Техническая Энциклопедия</h1>
+        <p>Выберите палитру ниже, чтобы мгновенно переключить цвета фигур:</p>
+    </header>
+
+    <div class="palette-container">
+        <h3>Управление палитрой:</h3>
+        <div class="palette-options">
+            <button class="palette-btn" onclick="setPalette('light')">Светлая (Оригинал)</button>
+            <button class="palette-btn" onclick="setPalette('dark')">Темная палитра</button>
+            <button class="palette-btn" onclick="setPalette('accent')">Цветная палитра</button>
+        </div>
+    </div>
+
+    <main>
+        <div class="grid-container">
+            
+            <figure class="grid-item">
+                <img src="https://picsum.photos/id/1071/600/400" alt="Гоночный автомобиль Audi 90 Quattro на треке">
+                <figcaption>
+                    <h3>Аэродинамика IMSA GTO</h3>
+                    <p>Легендарный Audi 90 Quattro IMSA GTO сочетал в себе пятицилиндровый турбомотор мощностью 720 л.с. и развитый аэродинамический обвес из углепластика.</p>
+                </figcaption>
+            </figure>
+
+            <figure class="grid-item">
+                <img src="https://picsum.photos/id/183/600/400" alt="Печатная плата с микросхемами логики крупным планом">
+                <figcaption>
+                    <h3>Синхронизация триггеров</h3>
+                    <p>При анализе логических переходов микросхем серий 74LS74 крайне важно учитывать задержки сигналов на фронтах тактовых импульсов.</p>
+                </figcaption>
+            </figure>
+
+            <figure class="grid-item">
+                <img src="https://picsum.photos/id/1050/600/400" alt="Процесс реставрации кузова автомобиля в боксе">
+                <figcaption>
+                    <h3>Обслуживание Audi A6 C4</h3>
+                    <p>Классический кузов C4 с легендарным мотором 2.8 AAH требует регулярной диагностики систем охлаждения и контроля за состоянием электрики.</p>
+                </figcaption>
+            </figure>
+
+            <figure class="grid-item">
+                <img src="https://picsum.photos/id/119/600/400" alt="Экран отладки мобильного приложения в Android Studio">
+                <figcaption>
+                    <h3>Интерфейсы на Jetpack Compose</h3>
+                    <p>Современная декларативная разработка UI под Android позволяет на лету реагировать на изменение конфигураций экрана без перезапуска активностей.</p>
+                </figcaption>
+            </figure>
+
+            <figure class="grid-item">
+                <img src="https://picsum.photos/id/3px/600/400" alt="Схема адаптивной сетки Grid на мобильном устройстве">
+                <figcaption>
+                    <h3>Гибкое управление сеткой</h3>
+                    <p>Использование относительных единиц измерения жидкости и медиа-запросов гарантирует, что контент перестроится идеально под любой девайс.</p>
+                </figcaption>
+            </figure>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Технический архив. Все права защищены.</p>
+    </footer>
+
+    <script>
+        function setPalette(themeName) {
+            // Очищаем старые темы
+            document.body.classList.remove('theme-light', 'theme-dark', 'theme-accent');
+            
+            // Включаем выбранную
+            if (themeName === 'dark') {
+                document.body.classList.add('theme-dark');
+            } else if (themeName === 'accent') {
+                document.body.classList.add('theme-accent');
+            } else {
+                document.body.classList.add('theme-light');
+            }
+        }
+    </script>
+</body>
+</html>

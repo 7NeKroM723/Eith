@@ -1,0 +1,207 @@
+/* ==========================================================================
+   ОБЩИЕ СТИЛИ И ВЫРАВНИВАНИЕ (Чтобы ничего не съезжало)
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  line-height: 1.6;
+  padding: 20px;
+}
+
+/* Ограничиваем ширину шапки и подвала, чтобы они стояли ровно по центру */
+header, footer {
+  max-width: 1200px;
+  margin: 0 auto 20px auto;
+  text-align: center;
+}
+
+header h1 {
+  margin-bottom: 10px;
+}
+
+/* Блок выбора палитры цветов */
+.palette-container {
+  max-width: 1200px;
+  margin: 0 auto 20px auto;
+  padding: 15px;
+  background: #fff;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.palette-options {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.palette-btn {
+  padding: 10px 20px;
+  border: 2px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: all 0.2s ease;
+}
+
+/* ==========================================================================
+   1. МОБИЛЬНЫЙ ВИД (MOBILE-FIRST) - По умолчанию
+   ========================================================================== */
+.grid-container {
+  /* Для самой сетки МAX-WIDTH НЕ ИСПОЛЬЗУЕМ по заданию */
+  display: grid;
+  grid-template-columns: 1fr; /* Одна колонка */
+  gap: 10px; /* Зазор 10px */
+}
+
+.grid-item {
+  border: 2px solid #ccc;
+  background-color: #ffffff;
+  color: #333;
+  padding: 15px;
+  border-radius: 0; /* На мобильных без скруглений */
+}
+
+.grid-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* ==========================================================================
+   2. ПЛАНШЕТНЫЙ ВИД (min-width: 772px)
+   ========================================================================== */
+@media all and (min-width: 772px) {
+  .grid-container {
+    grid-template-columns: repeat(2, 1fr); /* Две колонки */
+  }
+
+  .grid-item {
+    border-radius: 20px; /* Круглая/овальная форма углов */
+  }
+
+  .grid-item:last-child {
+    grid-column: span 2; /* Последняя занимает обе колонки */
+  }
+}
+
+/* ==========================================================================
+   3. НАСТОЛЬНЫЙ ВИД (min-width: 992px) - Без max-width!
+   ========================================================================== */
+@media all and (min-width: 992px) {
+  .grid-container {
+    grid-template-columns: repeat(3, 1fr); /* Три колонки */
+  }
+
+  .grid-item {
+    border-radius: 0; /* Удаляем радиус у всех фигур */
+  }
+
+  .grid-item:nth-child(3n) {
+    grid-column: span 2; /* Каждая третья занимает обе колонки */
+  }
+
+  .grid-item:last-child {
+    grid-column: auto; /* Сброс планшетного правила для последней фигуры */
+  }
+}
+
+/* ==========================================================================
+   4. ПАЛИТРЫ ЦВЕТОВ (Классы переключаются через JS)
+   ========================================================================== */
+
+/* Темная палитра (Требование из задания) */
+body.theme-dark {
+  background-color: #121212;
+  color: #ffffff;
+}
+body.theme-dark .grid-item {
+  background-color: #242424; /* Темный фон фигур */
+  color: #fff59d; /* Светлый желтоватый шрифт */
+  border-color: #000000; /* Черная граница фигур */
+}
+body.theme-dark .palette-container {
+  background: #222;
+  color: #fff;
+}
+
+/* Дополнительная палитра (например, Яркая/Гоночная) */
+body.theme-accent .grid-item {
+  background-color: #90caf9; 
+  color: #0d47a1;
+  border-color: #0d47a1;
+}
+
+/* ==========================================================================
+   5. МЕДИА-ЗАПРОСЫ НА ПРЕДПОЧТЕНИЯ СИСТЕМЫ
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    animation-delay: -1ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Авто-включение темной темы, если она выбрана в Windows/macOS */
+@media (prefers-color-scheme: dark) {
+  body:not(.theme-light) {
+    background-color: #121212;
+    color: #ffffff;
+  }
+  body:not(.theme-light) .grid-item {
+    background-color: #242424;
+    color: #fff59d;
+    border-color: #000000;
+  }
+}
+
+/* ==========================================================================
+   КОРРЕКЦИЯ СТИЛЕЙ ДЛЯ ИНТЕРАКТИВНЫХ ПАЛИТР
+   ========================================================================== */
+
+/* Базовое состояние панели управления (Светлое) */
+.palette-container {
+  max-width: 1200px;
+  margin: 0 auto 20px auto;
+  padding: 15px;
+  background-color: #ffffff;
+  color: #333333;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Переключение панели в ТЕМНЫЙ режим при клике на кнопку */
+body.theme-dark .palette-container {
+  background-color: #242424 !important; /* Делаем блок темным, как и фигуры */
+  color: #ffffff !important;
+  border: 1px solid #444;
+}
+
+body.theme-dark .palette-btn {
+  background-color: #333333;
+  color: #fff59d;
+  border-color: #000000;
+}
+
+/* Переключение панели в ЦВЕТНОЙ режим при клике на кнопку */
+body.theme-accent .palette-container {
+  background-color: #e3f2fd;
+  color: #0d47a1;
+}
